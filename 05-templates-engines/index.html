@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+
+<head>
+	<title id="title">Day 5</title>
+	<script type="text/javascript" src="libs/handlebars-1.0.rc.1.js"></script>
+	<script src="libs/jquery-1.8.2.js"></script>
+	<script src="libs/underscore.js"></script>
+	<script src="libs/dust-full-0.3.0.js"></script>
+	<script src="intro.js"></script>
+
+	<style>
+		.profileContainer{
+			 width:100%;
+        	 margin: 0 auto;
+        	 position: absolute;
+		}
+		.imgAlling{
+        	float:left;
+        	margin-right:20px;
+
+      	}
+      	.listItem{
+      		margin-left:200px;
+      	}
+	</style>
+</head>
+
+<body>
+
+	<script id="simpleTemplate" type="text/x-handlebars-template">
+		<div class="entry">
+		    <h1>Professional Profile</h1>
+		    <div class="profileContainer">
+		    <img class='imgAlling' src={{ing}}>
+		    <p>{{name}}</p>
+		    <p>Current Position:	{{current}}</p>
+		    <p>Experience: 	
+			    <ul>
+			    	{{#each jobs}}
+			    	<li class='listItem'>{{this}}</li>
+			    	{{/each}}
+			    </ul>
+		    </p>
+		    <p>Education:	
+		    	<ul>
+		    		{{#each eds}}
+		    		<li class='listItem'>{{this}}</li>
+		    		{{/each}}
+		    	</ul>
+		    </p>
+		  </div>
+		</div>
+	</script>
+
+	<script>
+
+		function withUnderscore(data){
+
+			var toTemplate = "<div id='entry'><h1>Professional Profile</h1><div class='profileContainer'><img class='imgAlling' src= <%= ing %> ><p><%= name %></p><p>Current Position: <%= current %></p><p>Experience<ul><% _.each(jobs, function(j){%><li class='listItem'><%= j %></li><%})%></ul></p><p>Education:<ul><% _.each(eds, function(e){%><li class='listItem'><%= e %></li><%})%></ul></p></div></div>"; 
+
+			var source =_.template(toTemplate);
+
+			$("#content").append(source(data.data));
+
+		}
+
+		function withHandlebars(data){
+
+			var source = $("#simpleTemplate").html();
+			var context = data.data; 
+
+			var template = Handlebars.compile(source);
+			var html = template(context);
+
+			$("#content").append(html);
+
+		}
+
+		function doRequest(){	//Hace el request al json con información de perfil
+			$.ajax({
+				url:'http://localhost/new/day5/marcio.json',
+				type:'GET',
+				dataType:'json',
+				success: function(data){	//Si se carga con éxito, se puede mostrar con cualquiera de los 3 templates
+
+					//withHandlebars(data);
+					withDust(data);		//Ya tiene un archivo intro.js definido, se carga desde ahi directamente
+					//withUnderscore(data);
+				},
+				error: function(data){
+					console.log("Error in request");
+				}
+			})
+		}
+
+		function withDust(data){
+
+			//var h = "<div id='entry'><h1>Professional Profile</h1><div class='profileContainer'><img class='imgAlling' src={ing}><p>{name}</p><p>Current position {current}</p><p>Experience<ul>{#jobs}<li class='listItem'>{.}{~n}</li>{/jobs}</ul></p><p>Education<ul>{#eds}<li class='listItem'>{.}{~n}</li>{/eds}</ul></p></div></div>"; 
+
+			var context = data.data; 
+
+			//var compiled = dust.compile(h, "intro"); 
+			//console.log(compiled);
+
+			dust.render("intro", context, function(err, out) {$("#content").append(out)});
+
+		}
+
+		$(document).ready(
+
+			function(){
+
+				doRequest(); 
+				
+			}
+
+		)
+		
+	</script>
+
+<div id="content"></div>
+</body>
+
+</html>
