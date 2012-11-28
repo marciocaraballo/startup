@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Day 6 Bootcamp</title>
+		<script data-main="js/moviesList.js" src='js/lib/require.js'></script>
+		<style>
+			.inputMovie{
+				float:left;
+			}
+		</style>
+		<script type=text/template id="itemTemplate">
+			<div class="view" id= <%- title %> >
+				<li><%- title %></li>
+			</div>
+		</script>
+	</head>
+	<body>
+		<div id='moviesContainer'>
+			<h1>Add a Movie Please!, by title</h1>
+			<div id='inputContainer'>
+				<input id="newMovie" type="text" placeholder="Movie title" class='.inputMovie'>
+				<button id='addButton'>Add</button>
+				<button id='removeButton'>Remove</button>
+			</div>
+			<ul id="movieList"></ul>
+		</div>
+	</body>
+</html>
