@@ -1,0 +1,61 @@
+.menuItem:hover{
+	background-color:yellow;
+}
+
+
+span.hiOne{
+	background-color:blue;
+}
+
+span.hiTwo{
+	background-color: green;
+}
+
+span.hiThree{
+	background-color: red;
+}
+
+span[class^="hi"]{
+	background-color: brown; 
+}
+
+span[class$="One"]{
+	background-color: cyan; 
+}
+
+article{
+	box-shadow: 10px 10px 10px blue;
+}
+
+aside{
+	-webkit-transform: rotate(180deg); 
+}
+
+hr{
+	width:1%;
+}
+
+hr.left{
+	float:left;
+}
+
+hr.right{
+	float:right;
+	margin-right: 95%;
+}
+
+span[class^="hi"],span[class$="One"]{
+	background-color: white;
+}
+
+p:empty{
+	display:none;
+}
+
+article{
+	width:30%;
+}
+
+article#first{
+	float:right;
+}

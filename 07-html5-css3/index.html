@@ -1,0 +1,45 @@
+<!doctype html>
+<htlm lang='en'>
+	<head>
+		<meta charset="utf-8" />
+		<title>Day 7 Bootcamp</title>
+		<style>
+			.imgAlling{
+				float:left;
+			}
+		</style>
+		<style>
+			@media screen and (min-width: 1200px){
+				.text{
+					-webkit-column-count:4;
+				}
+				
+			}
+			@media screen and (min-width:800px) and (max-width:1200px){
+				.text{
+					-webkit-column-count:3;
+				}
+				.imgAlling{
+					width:20%;
+				}
+			}
+			@media screen and (max-width:800px){
+				.imgAlling{
+					width: 0%;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<article>
+			<header>
+				<h1>HTML 5 Doctype</h1>
+			</header>
+			<img class='imgAlling' src='http://www.unmatchedstyle.com/wp-content/uploads/2010/11/doctype.jpg' />
+			<p class="text">
+				This is called the “doctype.” There’s a long history — and a black art — behind the doctype. While working on Internet Explorer 5 for Mac, the developers at Microsoft found themselves with a surprising problem. The upcoming version of their browser had improved its standards support so much, older pages no longer rendered properly. Or rather, they rendered properly (according to specifications), but people expected them to render improperly. The pages themselves had been authored based on the quirks of the dominant browsers of the day, primarily Netscape 4 and Internet Explorer 4. IE5/Mac was so advanced, it actually broke the web.
+				Microsoft came up with a novel solution. Before rendering a page, IE5/Mac looked at the “doctype,” which is typically the first line of the HTML source (even before the html element). Older pages (that relied on the rendering quirks of older browsers) generally didn’t have a doctype at all. IE5/Mac rendered these pages like older browsers did. In order to “activate” the new standards support, web page authors had to opt in, by supplying the right doctype before the html element.
+			</p>
+		</article>
+	</body>
+</html>
