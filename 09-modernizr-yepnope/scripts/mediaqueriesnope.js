@@ -1,0 +1,1 @@
+$("#fullbody").append("<p>Browser doesn't support MediaQueries. Page won't load. Sorry :(</p>");	//Se agrega el contenido de la pagina al div bajo yep
