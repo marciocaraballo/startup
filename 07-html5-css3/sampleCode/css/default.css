@@ -31,24 +31,11 @@ aside{
 	-webkit-transform: rotate(180deg); 
 }
 
-hr{
-	width:1%;
-}
-
-hr.left{
-	float:left;
-}
-
-hr.right{
-	float:right;
-	margin-right: 95%;
-}
-
 span[class^="hi"],span[class$="One"]{
 	background-color: white;
 }
 
-p:empty{
+p:empty{	/*Para los p tag vacios*/
 	display:none;
 }
 
@@ -56,6 +43,14 @@ article{
 	width:30%;
 }
 
-article#first{
-	float:right;
+#firstArticle{
+	float:left;
+}
+
+#leftLine{
+	border-left:3px solid blue;
+}
+
+#rightLine{ 
+	border-right:3px solid blue;
 }

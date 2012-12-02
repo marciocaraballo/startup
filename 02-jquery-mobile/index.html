@@ -1,0 +1,183 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>Day 2</title> 
+	<style>					
+      span.highlight
+      {
+      background-color:yellow;
+      }
+      .link{
+
+      }
+      .moviesContainer{
+        width:100%;
+        margin: 0;
+      }
+      .imgAlling{
+        float:left;
+      }
+      .inner {
+        clear: both;
+      }
+    </style>
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
+</head> 
+<body> 
+<script>
+	function doFirstRequest(){
+		$.mobile.showPageLoadingMsg("b", "Loading", true);				//<!--Muestra el texto loading -->
+        var request = $.ajax({
+          url: 'http://bootcamp.aws.af.cm/welcome/marcio',
+          type : 'GET',
+          dataType:'json',          
+          error: function(data){
+            var color = $("#content").css("color","red");   			//<!--Se muestra en rojo el texto-->
+            $('.container').append('<p> HIGH ERROR </p>');
+          },
+          success: function(data){
+            var response = data.response; 
+            var color = $("#content").css("color","black");  		 	//<!--Se muestra en rojo el texto-->
+            $('.container').append('<p>'+response+'</p>'); 				//<!--Se agrega al div container-->
+            var text = $('.container').html();              			//<!--Obtengo el texto-->
+            text = text.replace("marcio","<span class=\"highlight\">marcio</span>");    	//<!--Lo remarco-->
+            $('div.container').replaceWith(text);           			//<!--Lo reemplazo en el div-->
+          }
+        });   
+    }
+
+    var movieArray; 
+
+    function doMoviesRequest(){
+    	$.mobile.showPageLoadingMsg("b", "Loading", true);	
+       $.ajax({
+          url: 'http://bootcamp.aws.af.cm/movies',
+          type:'GET',															
+          dataType:'json',
+          success: function(data){
+
+              alert("GREAT SUCCESS");
+              movieArray = data.d.results; 
+
+              for (i=0;i<movieArray.length;i++){  //<!--Recorro el arreglo de peliculas --> 
+
+                var movie = movieArray[i]; 
+                var imgSrc = movie.BoxArt.SmallUrl; //<!--Datos de la pelicula -->
+                var title = movie.Name;
+                var year = movie.ReleaseYear; 
+                var synopsis = movie.ShortSynopsis;
+
+                // DOM element creation
+                var element = $("<li>"+"<a href='#movieDialog' data-rel='dialog,button'><img src="+imgSrc+"><p>"+title+"</p><p>"+year+"</p><p>"+synopsis+"</p></li>");
+               	$("#moviesListThumbs").append(element);
+                // Event
+                
+                element.bind('click', { data : movie }, function(e) {	//CLick event
+                	
+                	var longImg = e.data.data.BoxArt.LargeUrl; 
+                	var syps = e.data.data.Synopsis; 
+
+                	$('#movieContent').html('').append("<p class='imgAlling'>" + "<img src="+longImg+"><p style='margin-right:10px'>"+syps+"</p>" +'</p>'); 
+                	$.mobile.loadPage('#movieDialog');
+                	
+                });
+              
+              }
+          }
+       });
+     }
+
+ 	$( document ).delegate("#menuPage", "pagecreate", function() {
+         
+         $("#button1").click(function(){doFirstRequest(); });
+         $(document).keyup(function(e){									//<!--Con ESC se cierra -->
+         	if (e.keyCode == 27) { $.mobile.hidePageLoadingMsg(); }
+         });
+         	
+         doMoviesRequest();           
+  	});
+</script>
+
+<div data-role="page" id="menuPage">
+
+	<div data-role="header">
+		<h1>Menu</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">		
+		<p><a href="#one" class= "link" data-role="button" data-transition="flip" id="moviesButton">Show page 1</a></p>
+		<p><a href="#two" data-role="button" data-transition="pop">Show Movies Page</a></p>
+		<p><a href="#three" data-role="button" data-transition="turn">Show page 3</a></p>
+		<p><a href="page1.html" data-role="button" data-transition="turn">Show page 4</a></p>
+
+		<p><a href="page1.html" data-role="button" data-transition="turn" data-rel="dialog">Show page 4 as Dialog</a></p>
+
+		<p><a href="pages\sample1.html" data-role="button" data-transition="turn">Go to Sample Page</a></p>
+
+	</div><!-- /content -->
+</div><!--END MAIN MENU-->
+<!--PAGE 1 STARTS-->
+<div data-role="page" id="one">
+
+	<div data-role="header">
+		<h1>Page 1</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<p>Just Page 1</p>
+		<p><b>Contentment</b> is 'acknowledgement and satisfaction of reaching capacity.' The level of capacity reached may be sought after, expected, desired, or simply predetermined as the level in which provides contentment.</p>
+		<button class="showLoading" id="button1">Simple Request</button>
+		<p><a href="#menuPage" data-role="button" data-transition="flip">Back to Menu!</a></p>
+		<div id="content" class="container" style="color:#0000FF"></div> 
+	</div><!-- /content -->
+
+</div><!-- /page 1 -->
+
+<!--Page 2 starts-->
+<div data-role="page" id="two">
+
+	<div data-role="header">
+		<h1>Page 2</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">		
+		<p>Just page 2!</p>
+		<p>In many ways, Contentment, which can be defined as the state of being satisfied, can be closely associated with the concept of happiness. In Positive Psychology social scientists study what might contribute to living a good life, or what would lead to people having increased positive mood and overall satisfaction with their life. Happiness, in Positive Psychology, is defined in a twofold manner, which in totality is referred to as Subjective Well-Being.</p>
+		<div id ="moviesInfo" class="moviesContainer">		<!--Info de las películas-->
+			<ul data-role="listview" id="moviesListThumbs">
+			</ul>
+		</div>
+		<p><a href="#menuPage" data-role="button" data-transition="pop">Back to Menu!</a></p>
+	</div><!-- /content -->
+
+</div><!-- /page 2 -->
+
+<!--Page 3 starts-->
+<div data-role="page" id="three">
+
+	<div data-role="header">
+		<h1>Page 3</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">		
+		<p>Just page 3!</p>
+		<p>Many religions have some form of eternal bliss or heaven as their apparent goal often contrasted with eternal torment or dissatisfaction. The source of all mentally created dissatisfaction appears to stem from the ability to compare and contrast experiences and find reality as one is living it to be less than ideal. Many religions believe this was caused by man eating of the forbidden Tree of the Knowledge of Good and Evil. Man's eyes were "opened" to know the distinction between good and evil(Genesis 3:5).</p>
+		<p><a href="#menuPage" data-role="button" data-transition="turn">Back to Menu!</a></p>
+	</div><!-- /content -->
+
+</div><!-- /page 3 -->
+
+<div data-role="dialog" id="movieDialog">
+	<div data-role="header">
+		<h1>Movie Information</h1>
+	</div><!-- /header -->
+	<div data-role="content" id="movieContent">
+	</div>
+	
+</div>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 //Clase director con un único atributo
 
-define(["./element"], function(Element){
+define(["element"], function(Element){
 
 		Director.prototype = Object.create(Element.prototype);
 
@@ -19,7 +19,7 @@ define(["./element"], function(Element){
 
 		Director.prototype.speak = function(pos){
 
-			return this.quotes[0]; 
+			return this.quotes[pos]; 
 
 		}
 

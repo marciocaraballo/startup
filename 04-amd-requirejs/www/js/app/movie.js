@@ -1,6 +1,6 @@
 //Modulo Movie del dia 3
 
-define(["./director","./element"], function(Director, Element){ 
+define(["director","element"], function(Director, Element){ 
 
 		Movie.prototype = Object.create(Element.prototype);
 

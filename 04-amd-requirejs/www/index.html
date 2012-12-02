@@ -1,9 +1,31 @@
 <!DOCTYPE html> 
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
 		<title>Day 4</title>
 		<script data-main="js/app.js" src="js/lib/require.js"></script>	 <!--Agrego require.js-->
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
 	</head>
 	<body>	
+		<div data-role="page">
+			<div data-role="header">
+				<h1>Show Me The Quote!</h1>
+			</div>
+			<div data-role="content">
+				<a href='#movieDialog' data-rel='dialog'>Press me please!</a>
+			</div>
+		</div>
+		
+		<div data-role="dialog" id="movieDialog">
+			<div data-role="header">
+				<h1>Quotes</h1>
+			</div><!-- /header -->
+			<div data-role="content" id="movieContent">
+			</div>
+			<div data-role="footer">
+				<button id="randomButton">Randomize</button>
+			</div>
+		</div>
+
 	</body>
 </html>

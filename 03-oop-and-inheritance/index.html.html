@@ -1,0 +1,226 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<title>Day 3</title>
+	</head>
+	<body>
+		<script>
+
+			var movie = Object.create(null);	//Creo una pelicula prototipo
+			movie.set = function(attrib, value){	//Seteo un atributo con su respectivo valor
+
+				this[attrib] = value; 
+
+			}
+			movie.get = function(attrib){
+				return this[attrib]; 
+			}
+			movie.play = function(){
+				//console.log("Hi, I'm playing the movie "+this.name);
+				if(this.playing){
+					this.publish("Already playing "+this.name);
+				}
+				else{
+					this.playing = true; 
+					this.publish("Now playing "+this.name);
+				}
+			}
+			movie.stop = function(){
+				//console.log("Stopped playing "+this.name);
+				if(this.playing){
+					this.playing = false; 
+					this.publish("Stopped : "+this.name);
+				}
+				else{
+					this.publish("Movie is not playing "+this.name);
+				}
+			}
+
+			var publisher = Object.create(null); 		//Creo la clase que define a los publishers
+			publisher.addSuscriber = function(callback){	//Agrego un suscriber al final (con función callback)
+				this.subscribers[this.subscribers.length] = callback;
+			}
+			publisher.removeSubscriber = function (callback) {
+				for (var i = 0; i < this.subscribers.length; i++) {
+					if (this.subscribers[i] === callback) {
+						delete(this.subscribers[i]);
+					}
+				}
+			}
+			publisher.publish = function (what) {	//Publico algo
+				for (var i = 0; i < this.subscribers.length; i++) {
+					if (typeof this.subscribers[i] === 'function') {
+						this.subscribers[i](what);
+					}
+				}
+			}
+			publisher.make = function (o) { //Convierte objeto en publisher
+				for (var i in this) {
+					o[i] = this[i];
+					o.subscribers = [];
+				}
+			}
+
+			var social = Object.create(null);	//Con las nuevas propiedades
+			social.share = function(friendName){
+
+				this.publish("Sharing "+this.name + " with "+friendName);
+
+			}
+			social.like = function(){
+
+				this.publish("Liked "+this.name);
+
+			}
+
+
+			//Para el mixin ->permite combinar objetos copiando propiedades entre objetos, uno fuente y otro destino
+
+			// Aliases for the rather verbose methods on ES5
+			var descriptor  = Object.getOwnPropertyDescriptor
+			  , properties  = Object.getOwnPropertyNames
+			  , define_prop = Object.defineProperty
+
+			// (target:Object, source:Object) → Object
+			// Copies properties from `source' to `target'
+			function extend(target, source) {
+			    properties(source).forEach(function(key) {
+			        define_prop(target, key, descriptor(source, key)) })
+
+			    return target
+			}
+
+			extend(movie,social);	//Hago la extensión con el comportamiento de social
+
+			var movie2 = Object.create(movie);	//Creo una segunda película
+			movie2.set('name','Waterboy 2');
+			movie2.set('playing',false);
+
+			var movie3 = Object.create(movie);	//Creo una tercera película
+			movie3.set('name','Waterboy 3');
+			movie3.set('playing',false);
+
+			publisher.make(movie2);	//Se vuelven publishers, le agrego la funcionalidad para que sea observable
+			publisher.make(movie3);
+
+			var movieObserver = Object.create(null);	//Objeto que observará play y stop de movies, tambien download si corresponde
+			movieObserver.update = function(text){
+				console.log(" NEWS : "+text);
+			}
+
+			movie2.addSuscriber(movieObserver.update);	//Paso la función update que actuará ante el publish
+			movie3.addSuscriber(movieObserver.update);
+	
+			var downloadMovie = Object.create(movie);	//Objecto que define el comportamiento download
+			downloadMovie.set('name','Waterboy for ever');	
+			downloadMovie.set('playing',false);
+
+			downloadMovie.download = function(){	//Defune una función download propia del objeto
+
+				//console.log("Downloading "+this.name);
+				this.publish("Downloading "+this.name);
+			}
+
+			publisher.make(downloadMovie);	//Se vuelve publisher
+			downloadMovie.addSuscriber(movieObserver.update); 
+
+			//Creo actor usando constructor
+
+			function Actor(name,movie){
+				this.name = name;
+				this.movie = movie;
+			}
+
+			Actor.prototype.info = function(){	//Muestra información de actor
+				console.log(this.name + " "+this.movie);
+			}
+
+			var actor = new Actor("sandler","waterboy"); 
+
+			//Herencia con constructores
+
+			var proto = Object.getPrototypeOf
+
+			function AgeActor(name,movie,age){	//Actor con edad
+
+				proto(AgeActor.prototype).constructor.call(this,name,movie);	//Encuentra al padre y le llama al constructor
+				this.age = age; 
+
+			}
+
+			AgeActor.prototype = Object.create(Actor.prototype);	//Obtengo las propiedades de Actor.prototype
+			AgeActor.prototype.constructor = AgeActor; 	//Resetea el constructor
+			AgeActor.prototype.info = function(){	//Redefino la función info para la clase AgeActor
+				console.log("Name: "+this.name + " Movie: "+this.movie+" Age: "+this.age);
+			}
+			AgeActor.prototype.getAge = function(){	//Solo la edad
+				console.log("Age "+this.age);
+			}
+
+			//Creo algunos actores
+			var actor1 = new AgeActor('sandler','waterboy','12');
+			var actor2 = new AgeActor('stallone','rambo','99');
+			var actor3 = new AgeActor('arnold','lalala','0'); 
+
+			//Defino un arreglo de actores
+			var actors = new Array();
+			actors[0]=actor1;
+			actors[1]=actor2;
+			actors[2]=actor3; 
+
+			movie2.set('actors',actors);	//Se agregan a la película 2
+
+			//Agrego movie como module
+
+			var movieModule = (function () {
+			    // private variables and functions
+
+			    // constructor
+			    var movieModule = function () {
+			    };
+
+			    // prototype
+			    movieModule.prototype = {
+			        constructor: movieModule,
+			        set: function(attrib, value){	//Seteo un atributo con su respectivo valor
+						this[attrib] = value; 
+					},
+					get:function(attrib){
+						return this[attrib]; 
+					},
+					play:function(){
+						if(this.playing){
+							this.publish("Already playing "+this.name);
+						}
+						else{
+							this.playing = true; 
+							this.publish("Now playing "+this.name);
+						}
+					},
+					stop:function(){
+
+						if(this.playing){
+							this.playing = false; 
+							this.publish("Stopped : "+this.name);
+						}
+						else{
+							this.publish("Movie is not playing "+this.name);
+						}
+
+					}
+			    };
+
+			    // return module
+			    return movieModule;
+			})();
+
+			var newMovie = new movieModule();
+			newMovie.set('name','waterboy revenge');
+			newMovie.set('playing',false);
+
+			publisher.make(newMovie);
+			newMovie.addSuscriber(movieObserver.update);
+
+		</script>
+	</body>
+</html>

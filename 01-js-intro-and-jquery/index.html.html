@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Globant :: Welcome to the HTML5 bootcamp</title>
+    <style>
+      .moviesContainer{
+        width:300px;
+        margin: 0 auto;
+        opacity:0.7;
+      }
+      .imgAlling{
+        float:left;
+      }
+      .inner {
+        clear: both;
+
+      }
+
+    </style>
+    <style>
+      span.highlight
+      {
+      background-color:yellow;
+      }
+    </style>
+
+    
+  </head>
+<body>
+    <script src="jquery-1.8.2.js"></script>
+    <script>
+
+    function doFirstRequest(){
+        var request = $.ajax({
+          url: 'http://bootcamp.aws.af.cm/welcome/marcio',
+          type : 'GET',
+          dataType:'json',          
+          error: function(data){
+            var color = $("#content").css("color","red");   <!--Se muestra en rojo el texto-->
+            $('.container').append('<p> HIGH ERROR </p>');
+          },
+          success: function(data){
+            alert("SUCCESS "); 
+            var response = data.response; 
+            var color = $("#content").css("color","black");   <!--Se muestra en rojo el texto-->
+            $('.container').append('<p>'+response+'</p>');  <!--Se agrega al div container-->
+            var text = $('.container').html();              <!--Obtengo el texto-->
+            text = text.replace("marcio","<span class=\"highlight\">marcio</span>");    <!--Lo remarco-->
+            $('div.container').replaceWith(text);           <!--Lo reemplazo en el div-->
+          }
+       });
+     }
+
+     function doMoviesRequest(){
+       $.ajax({
+          url: 'http://bootcamp.aws.af.cm/movies',
+          type:'GET',
+          dataType:'json',
+          success: function(data){
+
+              alert("GREAT SUCCESS");
+              var movieArray = data.d.results; 
+
+              for (i=0;i<movieArray.length;i++){  <!--Recorro el arreglo de peliculas --> 
+
+                var movie = movieArray[i]; 
+
+                var imgSrc = movie.BoxArt.LargeUrl; <!--Datos de la pelicula -->
+                var title = movie.Name;
+                var year = movie.ReleaseYear; 
+                var synopsis = movie.Synopsis; 
+
+                $("#moviesInfo").append("<div class=\"inner\">"+"<img class=\"imgAlling\" src="+imgSrc+">"+"<p>"+title+"</p>"+"<p>"+year+"</p>"+"<p>"+synopsis+"</p>"+"</div>");
+                
+              }
+          }
+       });
+     }
+
+     $(document).ready(function(){      <!--Documento listo para ser manipulado-->
+  	 $("#button1").click(function(){    <!--Click en boton 1 para obtener el text-->
+        doFirstRequest(); 
+  	 });
+
+     $("#button2").click(function(){    <!--Click en boton 2 para las peliculas-->
+        doMoviesRequest(); 
+     });
+     $("#alias").val("something");
+     $("#alias").focus();
+
+     alert("DONE LOADING");             <!--Alerta fin de carga-->
+	 });
+
+   </script>
+<button id="button1">Simple Request</button>
+<button id="button2">Movies Request</button>
+<input type="text" value="test" id="alias"/>
+<div id="content" class="container" style="color:#0000FF"></div> 
+<div id ="moviesInfo" class="moviesContainer">
+</div>
+</body>
+</html>
