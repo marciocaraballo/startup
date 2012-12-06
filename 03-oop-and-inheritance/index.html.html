@@ -6,7 +6,7 @@
 	<body>
 		<script>
 
-			var movie = Object.create(null);	//Creo una pelicula prototipo
+			var movie = {};	//Creo una pelicula prototipo
 			movie.set = function(attrib, value){	//Seteo un atributo con su respectivo valor
 
 				this[attrib] = value; 
@@ -158,15 +158,10 @@
 			}
 
 			//Creo algunos actores
-			var actor1 = new AgeActor('sandler','waterboy','12');
-			var actor2 = new AgeActor('stallone','rambo','99');
-			var actor3 = new AgeActor('arnold','lalala','0'); 
+			var actor1 = new AgeActor('sandler','waterboy','12'), actor2 = new AgeActor('stallone','rambo','99'), actor3 = new AgeActor('arnold','lalala','0'); 
 
 			//Defino un arreglo de actores
-			var actors = new Array();
-			actors[0]=actor1;
-			actors[1]=actor2;
-			actors[2]=actor3; 
+			var actors = [actor1,actor2,actor3]; 
 
 			movie2.set('actors',actors);	//Se agregan a la película 2
 

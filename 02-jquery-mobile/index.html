@@ -62,7 +62,7 @@
               alert("GREAT SUCCESS");
               movieArray = data.d.results; 
 
-              for (i=0;i<movieArray.length;i++){  //<!--Recorro el arreglo de peliculas --> 
+              for (var i=0;i<movieArray.length;i++){  //<!--Recorro el arreglo de peliculas --> 
 
                 var movie = movieArray[i]; 
                 var imgSrc = movie.BoxArt.SmallUrl; //<!--Datos de la pelicula -->
@@ -94,7 +94,7 @@
          
          $("#button1").click(function(){doFirstRequest(); });
          $(document).keyup(function(e){									//<!--Con ESC se cierra -->
-         	if (e.keyCode == 27) { $.mobile.hidePageLoadingMsg(); }
+         	if (e.keyCode === 27) { $.mobile.hidePageLoadingMsg(); }
          });
          	
          doMoviesRequest();           
