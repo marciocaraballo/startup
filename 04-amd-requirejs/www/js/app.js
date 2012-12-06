@@ -36,21 +36,11 @@ function (Movie, Director,Element) {
 
     m.set('director',w);
 
-    var element = $("<p>"+w.speak(0)+"</p>");   //Quote to add
-
     $("#movieContent").append("<p>"+w.speak(0)+"</p>");
-
-    var button = $("#randomButton");
-
-    console.log(button);
 
     $("#randomButton").click(function(){
 
             var randomnumber=Math.floor(Math.random()*size);
-
-            console.log(randomnumber);
-
-            var element = $("<p>"+w.speak(randomnumber)+"</p>");   //Quote to add
 
             $("#movieContent").html('').append("<p>"+w.speak(randomnumber)+"</p>");
 
