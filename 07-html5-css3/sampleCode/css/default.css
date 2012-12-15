@@ -24,7 +24,10 @@ span[class$="One"]{
 }
 
 article{
-	box-shadow: 10px 10px 10px blue;
+	-webkit-box-shadow: 10px 10px 10px blue;
+	-moz-box-shadow: 10px 10px 10 px blue;
+	-o-box-shadow:10px 10px 10px blue;
+	-ms-box-shadow:10px 10px 10px blue;
 }
 
 aside{
@@ -40,11 +43,12 @@ p:empty{	/*Para los p tag vacios*/
 }
 
 article{
-	width:30%;
+	float: left;
+	width: 40%;
 }
 
 #firstArticle{
-	float:left;
+	margin-right: 30px;
 }
 
 #leftLine{
