@@ -45,6 +45,7 @@ p:empty{	/*Para los p tag vacios*/
 article{
 	float: left;
 	width: 40%;
+	min-width: 400px; 
 }
 
 #firstArticle{
